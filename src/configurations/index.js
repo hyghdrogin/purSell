@@ -4,7 +4,8 @@ dotenv.config();
 
 const config = {
 	PORT: process.env.PORT,
-	API_NAME: process.env.API_NAME
+	API_NAME: process.env.API_NAME,
+	URI: process.env.SQL_URL
 };
 
 const incompleteConfig = Object.entries(config)
