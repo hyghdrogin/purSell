@@ -1,5 +1,5 @@
 {
-  "name": "purSelll",
+  "name": "purSell",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
@@ -7,11 +7,12 @@
     "start": "node src/app.js",
     "dev": "nodemon src/app.js"
   },
-  "repository": "https://github.com/hyghdrogin/purSelll.git",
+  "repository": "https://github.com/hyghdrogin/purSell.git",
   "author": "hyghdrogin <omokewt@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "luxon": "^3.3.0"
   },

@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { requestLogger } from "./utilities/requestLogger.js";
+import requestLogger from "./utilities/requestLogger.js";
+import config from "./configurations/index.js";
 
 const app = express();
 
@@ -9,15 +10,8 @@ app.use(express.json({ limit: "50mb"}));
 app.use(express.urlencoded({ extended: false, limit: "50mb"}));
 app.use(requestLogger);
 
-app.get("/api/health", (req, res) => {
-	res.send({
-		success: true,
-		message: "Server is healthy"
-	});
-});
-
 app.get("/",(req, res) => {
-	res.send("Welcome to Pursell API");
+	res.send(`Welcome to ${config.API_NAME} API`);
 });
 
 app.use((req, res) => res.status(404).send({
