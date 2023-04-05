@@ -18,12 +18,18 @@ const User = sequelize.define("User", {
 		type: DataTypes.STRING
 	},
 	userName: {
-		type: DataTypes.STRING
+		type: DataTypes.STRING,
+		unique: true
 	},
 	email: {
-		type: DataTypes.STRING
+		type: DataTypes.STRING,
+		unique: true
 	},
 	phoneNumber: {
+		type: DataTypes.STRING,
+		unique: true
+	},
+	password: {
 		type: DataTypes.STRING
 	},
 	dateOfBirth: {
@@ -52,7 +58,6 @@ const User = sequelize.define("User", {
 
 (async () => {
 	await sequelize.sync({ force: true });
-	console.log("Database Connected Successfully");
 })();
 
 export default User;

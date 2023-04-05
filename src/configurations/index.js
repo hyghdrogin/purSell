@@ -5,7 +5,8 @@ dotenv.config();
 const config = {
 	PORT: process.env.PORT,
 	API_NAME: process.env.API_NAME,
-	URI: process.env.SQL_URL
+	URI: process.env.SQL_URL,
+	JWT: process.env.JWT_KEY
 };
 
 const incompleteConfig = Object.entries(config)
