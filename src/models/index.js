@@ -1,7 +1,8 @@
-import Users from "./userModel.js";
+import User from "./userModel.js";
+import Otp from "./otpModel.js";
 
 const models = {
-	Users
+	User, Otp
 };
 
 export default models;
