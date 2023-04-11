@@ -27,10 +27,12 @@ const Otp = sequelize.define("Otp", {
 	modelName: "Otp"
 });
 
-Otp.belongsTo(User, {
-	targetKey: "email",
-	foreignKey: "owner"
-});
+Otp.associations = () => {
+	Otp.belongsTo(User, {
+		targetKey: "email",
+		foreignKey: "owner"
+	});
+};
 
 (async () => {
 	await sequelize.sync({ force: true });

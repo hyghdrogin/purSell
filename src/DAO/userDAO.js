@@ -1,14 +1,16 @@
 import models from "../models/index.js";
-import generateOTP from "../middlewares/otpGenerator.js";
+
+
+const createOtp = async (email, otp) => {
+	await models.Otp.create({
+		owner: email, token: otp
+	});
+	return otp;
+};
 
 const createUser = async (userDetails) => {
 
 	const user = await models.User.create(userDetails);
-	const otp = generateOTP();
-	console.log(user.email);
-	await models.Otp.create({
-		owner: user.email, token: otp
-	});
 	return user;
 };
 
@@ -20,5 +22,5 @@ const findByEmail = async (email) => {
 };
 
 export {
-	createUser, findByEmail
+	createUser, findByEmail, createOtp
 };

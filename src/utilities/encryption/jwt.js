@@ -1,5 +1,5 @@
 import { JsonWebTokenError, sign, verify } from "jsonwebtoken";
-import config from "../configurations/index.js";
+import config from "../../configurations/index.js";
 
 const key = config.JWT;
 

@@ -6,7 +6,9 @@ const config = {
 	PORT: process.env.PORT,
 	API_NAME: process.env.API_NAME,
 	URI: process.env.SQL_URL,
-	JWT: process.env.JWT_KEY
+	JWT: process.env.JWT_KEY,
+	SENDGRID: process.env.SENDGRID_API_KEY,
+	EMAIL: process.env.SENDGRID_EMAIL
 };
 
 const incompleteConfig = Object.entries(config)

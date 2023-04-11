@@ -1,5 +1,8 @@
 import { registerUser } from "../services/userService.js";
-import { findByEmail } from "../DAO/userDAO.js";
+import { findByEmail, createOtp } from "../DAO/userDAO.js";
+import generateOTP from "../utilities/otp/generator.js";
+import sendEmail from "../utilities/mail.js";
+import otpTemplate from "../utilities/otp/template.js";
 import { validateSignUp } from "../utilities/validations/userValidation.js";
 import { successMessage, errorMessage, errorHandler } from "../utilities/responses.js";
 
@@ -9,11 +12,17 @@ const newUser = async (req, res) => {
 		if (valid.error) {
 			return errorMessage(res, 400, valid.error.message);
 		}
+		const { name, email, password } = req.body;
 		const user = await findByEmail(req.body.email);
 		if (user) {
 			return errorMessage(res, 400, "User already exist");
 		}
-		const result = await registerUser(req.body.name, req.body.email, req.body.password);
+		const result = await registerUser(name, email, password);
+		const createdOtp = generateOTP();
+		const otp = await createOtp(email, createdOtp);
+		const subject = "User created";
+		const html = otpTemplate(otp, name);
+		await sendEmail(email, subject, html);
 		return successMessage(res, 201, "User Created Successfully", { result });
 	} catch (error) {
 		errorHandler(error, req);
