@@ -56,8 +56,4 @@ const User = sequelize.define("User", {
 	modelName: "Users"
 });
 
-(async () => {
-	await sequelize.sync({ force: true });
-})();
-
 export default User;

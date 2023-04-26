@@ -34,8 +34,4 @@ Otp.associations = () => {
 	});
 };
 
-(async () => {
-	await sequelize.sync({ force: true });
-});
-
 export default Otp;

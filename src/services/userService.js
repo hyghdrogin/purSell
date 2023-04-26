@@ -1,4 +1,5 @@
-import { createUser, createOtp } from "../DAO/userDAO.js";
+import { createUser } from "../DAO/userDAO.js";
+import { createOtp } from "../DAO/otpDAO.js";
 import generateOTP from "../utilities/otp/generator.js";
 import sendEmail from "../utilities/mail.js";
 import otpTemplate from "../utilities/otp/template.js";
