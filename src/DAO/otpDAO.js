@@ -7,6 +7,11 @@ const createOtp = async (email, otp) => {
 	return otp;
 };
 
+const findOtp = async (otp) => {
+	const token = await Otp.findOne({ where: { token: otp} });
+	return token;
+};
+
 export {
-	createOtp
+	createOtp, findOtp
 };

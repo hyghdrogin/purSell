@@ -27,6 +27,14 @@ const validateSignIn = (signIn) => {
 	});
 	return userSignIn.validate(signIn, options);
 };
+
+const validateUserToken = (token) => {
+	const userToken = Joi.object({
+		token: Joi.number().integer().max(9999).required()
+	});
+	return userToken.validate(token, options);
+};
+
 export {
-	validateSignUp, validateSignIn
+	validateSignUp, validateSignIn, validateUserToken
 };

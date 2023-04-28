@@ -1,5 +1,5 @@
-import { createUser } from "../DAO/userDAO.js";
-import { createOtp } from "../DAO/otpDAO.js";
+import { createUser, findByEmail } from "../DAO/userDAO.js";
+import { createOtp, findOtp } from "../DAO/otpDAO.js";
 import generateOTP from "../utilities/otp/generator.js";
 import sendEmail from "../utilities/mail.js";
 import otpTemplate from "../utilities/otp/template.js";
@@ -22,6 +22,17 @@ const registerUser = async (name, email, password) => {
 	return created;
 };
 
+const verifyOtp = async (otp) => {
+	const verifyToken = await findOtp(otp);
+	verifyToken.expired = true;
+	await verifyToken.save();
+	const userEmail = verifyToken.dataValues.owner;
+	const user = await findByEmail(userEmail);
+	user.verified = true;
+	await user.save();
+	return user;
+};
+
 export {
-	registerUser
+	registerUser, verifyOtp
 };
