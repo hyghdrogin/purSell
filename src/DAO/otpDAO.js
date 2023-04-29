@@ -12,6 +12,11 @@ const findOtp = async (otp) => {
 	return token;
 };
 
+const findOtpByOwner = async (email) => {
+	const owner = await Otp.findOne({ where: { owner: email } });
+	return owner;
+};
+
 export {
-	createOtp, findOtp
+	createOtp, findOtp, findOtpByOwner
 };

@@ -1,6 +1,7 @@
-import { registerUser, verifyOtp } from "../services/userService.js";
+import { registerUser, verifyOtp, resendToken } from "../services/userService.js";
 import { findByEmail } from "../DAO/userDAO.js";
-import { validateSignUp, validateUserToken } from "../utilities/validations/userValidation.js";
+import { validateSignUp } from "../utilities/validations/userValidation.js";
+import { validateUserToken, validateUserEmail } from "../utilities/validations/tokenValidation.js";
 import { successMessage, errorMessage, errorHandler } from "../utilities/responses.js";
 import { findOtp } from "../DAO/otpDAO.js";
 
@@ -34,8 +35,23 @@ const tokenVerification = async (req, res) => {
 		if (otp.dataValues.expired) {
 			return errorMessage(res, 403, "Token already verified");
 		}
-		const user = await verifyOtp(token);
-		return successMessage(res, 200, "User Account Successfully verified", { user });
+		const result = await verifyOtp(token);
+		return successMessage(res, 200, "User Account Successfully verified", { result });
+	} catch (error) {
+		errorHandler(error, req);
+		return errorMessage(res, 500, error.message);
+	}
+};
+
+const tokenResend = async (req, res) => {
+	try {
+		const valid = validateUserEmail(req.body);
+		if (valid.error) {
+			return errorMessage(res, 400, valid.error.message);
+		}
+		const { email } = req.body;
+		const result = await resendToken(email);
+		return successMessage(res, 200, "Token Sent", { result });
 	} catch (error) {
 		errorHandler(error, req);
 		return errorMessage(res, 500, error.message);
@@ -43,5 +59,5 @@ const tokenVerification = async (req, res) => {
 };
 
 export {
-	newUser, tokenVerification
+	newUser, tokenVerification, tokenResend
 };
