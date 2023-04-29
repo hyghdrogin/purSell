@@ -1,9 +1,10 @@
-import { JsonWebTokenError, sign, verify } from "jsonwebtoken";
+import pkg from "jsonwebtoken";
 import config from "../../configurations/index.js";
 
+const { JsonWebTokenError, sign, verify } = pkg;
 const key = config.JWT;
 
-const generateToken = async (payload, key) => {
+const generateToken = async (payload) => {
 	const token = sign(payload, key, { expiresIn: "24h"});
 	return token;
 };
@@ -15,8 +16,9 @@ const validateToken = async (token) => {
 			return; 
 		}
 	} catch (error) {
-		console.error(JsonWebTokenError, error);
-	}
+		console.log(JsonWebTokenError, error);
+	} 
+	
 };
 
 export {

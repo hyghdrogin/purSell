@@ -14,7 +14,8 @@ const Otp = sequelize.define("Otp", {
 		unique: true
 	},
 	token: {
-		type: DataTypes.STRING
+		type: DataTypes.STRING,
+		unique: true
 	},
 	expired: {
 		type: DataTypes.BOOLEAN,

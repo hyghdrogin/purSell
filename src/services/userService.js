@@ -1,5 +1,6 @@
 import { createUser, findByEmail } from "../DAO/userDAO.js";
 import { createOtp, findOtp, findOtpByOwner } from "../DAO/otpDAO.js";
+import { generateToken } from "../utilities/encryption/jwt.js";
 import generateOTP from "../utilities/otp/generator.js";
 import sendEmail from "../utilities/mail.js";
 import otpTemplate from "../utilities/otp/template.js";
@@ -11,7 +12,7 @@ const registerUser = async (name, email, password) => {
 	const lastName = nameSplit[1];
 	const hashedPassword = await hashObject(password);
 	const userDetails = {
-		firstName, lastName, email, password: hashedPassword.toString
+		firstName, lastName, email, password: hashedPassword
 	};
 	const createdOtp = generateOTP();
 	const otp = await createOtp(email, createdOtp);
@@ -49,6 +50,13 @@ const resendToken = async (email) => {
 	return user;
 };
 
+const loginUser = async (email) => {
+	const user = await findByEmail(email);
+	const { id } = user;
+	const token = await generateToken({ id, email});
+	return { user, token };
+};
+
 export {
-	registerUser, verifyOtp, resendToken
+	registerUser, verifyOtp, resendToken, loginUser
 };
