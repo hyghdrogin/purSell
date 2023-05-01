@@ -20,7 +20,7 @@ const validateUserToken = (token) => {
 const validateUserEmail = (email) => {
 	const userToken = Joi.object({
 		email: Joi.string().email().required()
-	});
+	}).strict();
 	return userToken.validate(email, options);
 };
 

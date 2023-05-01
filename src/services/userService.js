@@ -57,6 +57,20 @@ const loginUser = async (email) => {
 	return { user, token };
 };
 
+const forgotPassword = async (email) => {
+	const user = await findByEmail(email);
+	const newOtp = generateOTP();
+	const tokenOwner = await findOtpByOwner(email);
+	tokenOwner.token = newOtp;
+	tokenOwner.expired = false;
+	const firstName = user.dataValues.firstName;
+	const subject = "PurSell Password reset token";
+	const html = otpTemplate(newOtp, firstName);
+	await sendEmail(email, subject, html);
+	await tokenOwner.save();
+	return tokenOwner;
+};
+
 export {
-	registerUser, verifyOtp, resendToken, loginUser
+	registerUser, verifyOtp, resendToken, loginUser, forgotPassword
 };

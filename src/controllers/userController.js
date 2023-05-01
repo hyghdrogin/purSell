@@ -1,4 +1,4 @@
-import { registerUser, verifyOtp, resendToken, loginUser } from "../services/userService.js";
+import { registerUser, verifyOtp, resendToken, loginUser, forgotPassword } from "../services/userService.js";
 import { findByEmail } from "../DAO/userDAO.js";
 import { compareObject } from "../utilities/encryption/bcrypt.js";
 import { validateSignIn, validateSignUp } from "../utilities/validations/userValidation.js";
@@ -71,7 +71,7 @@ const userLogin = async (req, res) => {
 		const { email, password } = req.body;
 		const user = await findByEmail(email);
 		if (!user) {
-			return errorMessage(res, 400, "Invalid Email");
+			return errorMessage(res, 400, "Invalid Login Credentials");
 		}
 		if (!user.dataValues.verified) {
 			return errorMessage(res, 409, "Kindly verify your account");
@@ -81,7 +81,7 @@ const userLogin = async (req, res) => {
 		}
 		const passCompare = await compareObject(password, user.dataValues.password);
 		if (!passCompare) {
-			return errorMessage(res, 400, "Invalid Password");
+			return errorMessage(res, 400, "Invalid Login Credentials");
 		}
 		const result = await loginUser(email);
 		return successMessage(res, 200, "User Logged In", { result });
@@ -91,6 +91,21 @@ const userLogin = async (req, res) => {
 	}
 };
 
+const passwordForget = async (req, res) => {
+	try {
+		const valid = validateUserEmail(req.body);
+		if (valid.error) {
+			return errorMessage(res, 400, valid.error.message);
+		}
+		const { email } = req.body;
+		await forgotPassword(email);
+		return successMessage(res, 200, "Reset Token sent to email");
+	} catch (error) {
+		errorHandler(error, req);
+		return errorMessage(res, 500, error.message);
+	}
+};
+
 export {
-	newUser, tokenVerification, tokenResend, userLogin
+	newUser, tokenVerification, tokenResend, userLogin, passwordForget
 };
