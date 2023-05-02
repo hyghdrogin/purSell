@@ -15,6 +15,7 @@ const validateToken = async (token) => {
 		if (!data) {
 			return; 
 		}
+		return data;
 	} catch (error) {
 		console.log(JsonWebTokenError, error);
 	} 

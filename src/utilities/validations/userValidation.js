@@ -41,6 +41,15 @@ const validatePasswordReset = (password) => {
 	return userPassword.validate(password, options);
 };
 
+const validatePasswordUpdate = (user) => {
+	const userPassword = Joi.object({
+		oldPassword: Joi.string().required(),
+		password: Joi.string().min(6).max(36).required(),
+		retypePassword: Joi.ref("password")
+	}).strict();
+	return userPassword.validate(user, options);
+};
+
 export {
-	validateSignUp, validateSignIn, validatePasswordReset
+	validateSignUp, validateSignIn, validatePasswordReset, validatePasswordUpdate
 };

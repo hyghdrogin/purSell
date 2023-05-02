@@ -1,7 +1,7 @@
-import { registerUser, verifyOtp, resendToken, loginUser, forgotPassword, newPassword } from "../services/userService.js";
-import { findByEmail } from "../DAO/userDAO.js";
+import { registerUser, verifyOtp, resendToken, loginUser, forgotPassword, newPassword, updatePassword } from "../services/userService.js";
+import { findByEmail, findById } from "../DAO/userDAO.js";
 import { compareObject } from "../utilities/encryption/bcrypt.js";
-import { validatePasswordReset, validateSignIn, validateSignUp } from "../utilities/validations/userValidation.js";
+import { validatePasswordReset, validateSignIn, validateSignUp, validatePasswordUpdate } from "../utilities/validations/userValidation.js";
 import { validateUserToken, validateUserEmail } from "../utilities/validations/tokenValidation.js";
 import { successMessage, errorMessage, errorHandler } from "../utilities/responses.js";
 import { findOtp } from "../DAO/otpDAO.js";
@@ -128,6 +128,34 @@ const passwordRenew = async (req, res) => {
 	}
 };
 
+const passwordUpdate = async (req, res) => {
+	try {
+		const { id } = req.user;
+		const valid = validatePasswordUpdate(req.body);
+		if (valid.error) {
+			return errorMessage(res, 400, valid.error.message);
+		}
+		const { oldPassword, password, retypePassword } = req.body;
+		const user = await findById(id);
+		console.log(user);
+		const userPassword = user.dataValues.password;
+		const passwordCompare = await compareObject(oldPassword, userPassword);
+		if (!passwordCompare) {
+			return errorMessage(res, 400, "Old Password is incorrect");
+		}
+		if (password !== retypePassword) {
+			return errorMessage(res, 403, "Password Mismatch");
+		}
+		const result = await updatePassword(id, password);
+		return successMessage(res, 200, "Password updated successfully", { result });
+	} catch (error) {
+		errorHandler(error, req);
+		return errorMessage(res, 500, error.message);
+	}
+};
+
 export {
-	newUser, tokenVerification, tokenResend, userLogin, passwordForget, passwordRenew
+	newUser, tokenVerification, tokenResend,
+	userLogin, passwordForget, passwordRenew,
+	passwordUpdate
 };

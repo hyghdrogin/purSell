@@ -1,4 +1,4 @@
-import { createUser, findByEmail } from "../DAO/userDAO.js";
+import { createUser, findByEmail, findById } from "../DAO/userDAO.js";
 import { createOtp, findOtp, findOtpByOwner } from "../DAO/otpDAO.js";
 import { generateToken } from "../utilities/encryption/jwt.js";
 import generateOTP from "../utilities/otp/generator.js";
@@ -31,7 +31,6 @@ const verifyOtp = async (otp) => {
 	const user = await findByEmail(userEmail);
 	user.verified = true;
 	await user.save();
-	return user;
 };
 
 const resendToken = async (email) => {
@@ -47,7 +46,6 @@ const resendToken = async (email) => {
 	const html = otpTemplate(newOtp, firstName);
 	await sendEmail(email, subject, html);
 	await checkEmail.save();
-	return user;
 };
 
 const loginUser = async (email) => {
@@ -68,7 +66,6 @@ const forgotPassword = async (email) => {
 	const html = otpTemplate(newOtp, firstName);
 	await sendEmail(email, subject, html);
 	await tokenOwner.save();
-	return tokenOwner;
 };
 
 const newPassword = async (password, otp) => {
@@ -79,9 +76,19 @@ const newPassword = async (password, otp) => {
 	const email = verifyToken.dataValues.owner;
 	const user = await findByEmail(email);
 	user.password = hashedPassword;
-	user.save();
+	await user.save();
 };
 
+const updatePassword = async (id, password) => {
+	const hashedPassword = await hashObject(password);
+	const user = await findById(id);
+	user.password = hashedPassword;
+	await user.save();
+	return user;
+}; 
+
 export {
-	registerUser, verifyOtp, resendToken, loginUser, forgotPassword, newPassword
+	registerUser, verifyOtp, resendToken,
+	loginUser, forgotPassword, newPassword,
+	updatePassword
 };
