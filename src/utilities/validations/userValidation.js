@@ -33,6 +33,14 @@ const validateSignIn = (signIn) => {
 	return userSignIn.validate(signIn, options);
 };
 
+const validatePasswordReset = (password) => {
+	const userPassword = Joi.object({
+		token: Joi.number().integer().max(9999).required(),
+		password: Joi.string().min(6).max(36).required()
+	}).strict();
+	return userPassword.validate(password, options);
+};
+
 export {
-	validateSignUp, validateSignIn
+	validateSignUp, validateSignIn, validatePasswordReset
 };

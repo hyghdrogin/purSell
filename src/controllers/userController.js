@@ -1,7 +1,7 @@
-import { registerUser, verifyOtp, resendToken, loginUser, forgotPassword } from "../services/userService.js";
+import { registerUser, verifyOtp, resendToken, loginUser, forgotPassword, newPassword } from "../services/userService.js";
 import { findByEmail } from "../DAO/userDAO.js";
 import { compareObject } from "../utilities/encryption/bcrypt.js";
-import { validateSignIn, validateSignUp } from "../utilities/validations/userValidation.js";
+import { validatePasswordReset, validateSignIn, validateSignUp } from "../utilities/validations/userValidation.js";
 import { validateUserToken, validateUserEmail } from "../utilities/validations/tokenValidation.js";
 import { successMessage, errorMessage, errorHandler } from "../utilities/responses.js";
 import { findOtp } from "../DAO/otpDAO.js";
@@ -106,6 +106,28 @@ const passwordForget = async (req, res) => {
 	}
 };
 
+const passwordRenew = async (req, res) => {
+	try {
+		const valid = validatePasswordReset(req.body);
+		if (valid.error) {
+			return errorMessage(res, 400, valid.error.message);
+		}
+		const { token, password } = req.body;
+		const otp = await findOtp(token);
+		if (!otp) {
+			return errorMessage(res, 403, "Invalid Token");
+		}
+		if (otp.dataValues.expired) {
+			return errorMessage(res, 403, "Token already verified");
+		}
+		await newPassword(password, token);
+		return successMessage(res, 200, "Password Set Successfully");
+	} catch (error) {
+		errorHandler(error, req);
+		return errorMessage(res, 500, error.message);
+	}
+};
+
 export {
-	newUser, tokenVerification, tokenResend, userLogin, passwordForget
+	newUser, tokenVerification, tokenResend, userLogin, passwordForget, passwordRenew
 };

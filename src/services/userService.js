@@ -71,6 +71,17 @@ const forgotPassword = async (email) => {
 	return tokenOwner;
 };
 
+const newPassword = async (password, otp) => {
+	const verifyToken = await findOtp(otp);
+	verifyToken.expired = true;
+	verifyToken.save();
+	const hashedPassword = await hashObject(password);
+	const email = verifyToken.dataValues.owner;
+	const user = await findByEmail(email);
+	user.password = hashedPassword;
+	user.save();
+};
+
 export {
-	registerUser, verifyOtp, resendToken, loginUser, forgotPassword
+	registerUser, verifyOtp, resendToken, loginUser, forgotPassword, newPassword
 };
