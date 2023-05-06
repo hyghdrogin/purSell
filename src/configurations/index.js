@@ -8,7 +8,8 @@ const config = {
 	URI: process.env.SQL_URL,
 	JWT: process.env.JWT_KEY,
 	SENDGRID: process.env.SENDGRID_API_KEY,
-	EMAIL: process.env.SENDGRID_EMAIL
+	EMAIL: process.env.SENDGRID_EMAIL,
+	CLOUDINARY: process.env.CLOUDINARY_URL
 };
 
 const incompleteConfig = Object.entries(config)

@@ -27,8 +27,8 @@ const Post = sequelize.define("Post", {
 }, {
 	sequelize,
 	timestamps: true,
-	tableName: "users",
-	modelName: "User"
+	tableName: "posts",
+	modelName: "Post"
 });
 
 export default Post;
