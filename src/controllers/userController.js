@@ -137,7 +137,6 @@ const passwordUpdate = async (req, res) => {
 		}
 		const { oldPassword, password, retypePassword } = req.body;
 		const user = await findById(id);
-		console.log(user);
 		const userPassword = user.dataValues.password;
 		const passwordCompare = await compareObject(oldPassword, userPassword);
 		if (!passwordCompare) {

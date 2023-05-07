@@ -1,4 +1,4 @@
-import { newPost } from "../services/postService.js";
+import { newPost, getPostById } from "../services/postService.js";
 import { validatePost } from "../utilities/validations/postValidation.js";
 import { errorMessage, errorHandler, successMessage } from "../utilities/responses.js";
 
@@ -16,6 +16,20 @@ export const createPost = async(req, res) => {
 		};
 		const result = await newPost(postDetails);
 		return successMessage(res, 201, "Post Created Successfully", { result }); 
+	} catch (error) {
+		errorHandler(error, req);
+		return errorMessage(res, 500, error.message);
+	}
+};
+
+export const retrievePostById = async (req, res) => {
+	try {
+		const { postId } = req.params;
+		const result = await getPostById(postId);
+		if (result == undefined ) {
+			return errorMessage(res, 403, "Invalid Post Id");
+		}
+		return successMessage(res, 200, "Post Fetched Successfully", { result });
 	} catch (error) {
 		errorHandler(error, req);
 		return errorMessage(res, 500, error.message);

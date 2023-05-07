@@ -1,5 +1,5 @@
-import { createPost } from "../DAO/postDAO.js";
 import { findById } from "../DAO/userDAO.js";
+import { createPost, findPostById } from "../DAO/postDAO.js";
 
 export const newPost = async (details) => {
 	const { id, title, description, photo } = details;
@@ -10,4 +10,9 @@ export const newPost = async (details) => {
 	};
 	const created = await createPost(postDetails);
 	return created;
+};
+
+export const getPostById = async (postId) => {
+	const post = await findPostById(postId);
+	return post;
 };

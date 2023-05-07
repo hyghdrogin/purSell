@@ -1,5 +1,6 @@
 import { DataTypes, UUIDV4 } from "sequelize";
 import sequelize from "../database/index.js";
+import User from "./userModel.js";
 
 const Post = sequelize.define("Post", {
 	id: {
@@ -30,5 +31,12 @@ const Post = sequelize.define("Post", {
 	tableName: "posts",
 	modelName: "Post"
 });
+
+Post.associations = () => {
+	Post.hasOne(User, {
+		foreignKey: "email",
+		as: "owner" 
+	});
+};
 
 export default Post;

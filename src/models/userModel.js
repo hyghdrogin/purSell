@@ -1,5 +1,7 @@
 import { DataTypes, UUIDV4 } from "sequelize";
 import sequelize from "../database/index.js";
+import Otp from "./otpModel.js";
+import Post from "./postModel.js";
 
 const User = sequelize.define("User", {
 	id: {
@@ -55,5 +57,10 @@ const User = sequelize.define("User", {
 	tableName: "users",
 	modelName: "User"
 });
+
+User.associations = () => {
+	User.hasOne(Otp),
+	User.hasMany(Post);
+};
 
 export default User;
