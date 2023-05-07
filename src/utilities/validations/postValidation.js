@@ -14,6 +14,7 @@ export const validatePost = (post) => {
 	const createPost = Joi.object({
 		title: Joi.string().min(5).max(50).required(),
 		description: Joi.string().required(),
+		units: Joi.number().integer().required()
 	});
 	return createPost.validate(post, options);
 };

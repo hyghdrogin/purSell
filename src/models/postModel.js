@@ -21,6 +21,9 @@ const Post = sequelize.define("Post", {
 	photo: {
 		type: DataTypes.STRING
 	},
+	units: {
+		type: DataTypes.INTEGER
+	},
 	active: {
 		type: DataTypes.BOOLEAN,
 		defaultValue: true
