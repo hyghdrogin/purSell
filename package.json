@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "seed": "node src/seeders/index.js"
   },
   "repository": "https://github.com/hyghdrogin/purSell.git",
   "author": "hyghdrogin <omokewt@gmail.com>",

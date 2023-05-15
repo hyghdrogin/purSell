@@ -1,8 +1,8 @@
-import { findById } from "../DAO/userDAO.js";
+import User from "../models/userModel.js";
 import { validateToken } from "../utilities/encryption/jwt.js"; 
 import {errorMessage, errorHandler} from "../utilities/responses.js";
 
-const verifyUser = async (req, res, next) => {
+export const verifyUser = async (req, res, next) => {
 	try {
 		const authHeader = req.headers.authorization;
 		if (req.headers && authHeader) {
@@ -11,7 +11,7 @@ const verifyUser = async (req, res, next) => {
 				const token = headerSplit[1];
 				if (/^Bearer$/i.test(headerSplit[0])) {
 					const decodedToken = await validateToken(token);
-					const user = await findById(decodedToken.id);
+					const user = await User.findOne({ where: { id: decodedToken.id } });
 					if (!user) {
 						return errorMessage(res, 404, "User not found");
 					}
@@ -30,6 +30,18 @@ const verifyUser = async (req, res, next) => {
 	}
 };
 
-export {
-	verifyUser
+export const verifyAdmin = async (req, res, next) => {
+	try {
+		const { id } = req.user;
+		const admin = await User.findOne({ where: {
+			id, role: "Admin"
+		}});
+		if (!admin) {
+			return errorMessage(res, 401, "Unauthorized Access");
+		}
+		return next();
+	} catch (error) {
+		errorHandler(error, req);
+		return errorMessage(res, 500, error.message);
+	}
 };
