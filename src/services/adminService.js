@@ -5,3 +5,9 @@ export const deactivateUser = async (id) => {
 	user.active = false;
 	user.save();
 };
+
+export const reactivateUser = async (id) => {
+	const user = await findById(id);
+	user.active = true;
+	user.save();
+};
